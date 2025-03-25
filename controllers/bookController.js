@@ -7,7 +7,7 @@ const asyncHandler = (fn) => (req, res, next) => {
 };
 
 // Create or Update Book
-const saveBook = asyncHandler(async (req, res, isUpdate = false) => {
+const saveBook = asyncHandler(async (req, res, next, isUpdate = false) => {
   const { error } = validateBook(req.body);
   if (error) return res.status(400).json({ message: error.details[0].message });
 
@@ -16,6 +16,12 @@ const saveBook = asyncHandler(async (req, res, isUpdate = false) => {
     book = await Book.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!book) return res.status(404).json({ message: "Book not found" });
   } else {
+    // Check for existing ISBN to avoid duplicate key error
+    const existingBook = await Book.findOne({ isbn: req.body.isbn });
+    if (existingBook) {
+      return res.status(409).json({ message: "ISBN already exists" });
+    }
+
     book = new Book(req.body);
     await book.save();
   }
