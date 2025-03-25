@@ -41,7 +41,7 @@ The API follows RESTful conventions and supports the following operations:
 1. Clone the repository:
 
    ```
-   git clone https://github.com/yourusername/books-manager.git
+   git clone https://github.com/jahanzaib-baig/books-manager.git
    cd books-manager
 
    ```
