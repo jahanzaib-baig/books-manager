@@ -14,8 +14,7 @@ const bookSchema = new Schema({
   isbn: {
     type: String,
     required: true,
-    unique: true,
-    match: /^(97(8|9))?\d{9}(\d|X)$/,
+    match: [/^\d{3}-\d{10}$/, "ISBN must be in the format XXX-XXXXXXXXXX"],
   },
 });
 
