@@ -1,6 +1,15 @@
 const Joi = require("joi");
+const mongoose = require("mongoose");
 
 const bookSchema = Joi.object({
+  _id: Joi.string()
+    .custom((value, helpers) => {
+      if (!mongoose.Types.ObjectId.isValid(value)) {
+        return helpers.error("any.invalid");
+      }
+      return value;
+    })
+    .optional(),
   title: Joi.string().required(),
   author: Joi.string().required(),
   description: Joi.string().required(),
@@ -14,6 +23,7 @@ const bookSchema = Joi.object({
     .required(),
 });
 
-const validateBook = (data) => bookSchema.validate(data);
+const validateBook = (data) =>
+  bookSchema.validate(data, { stripUnknown: true });
 
 module.exports = validateBook;
